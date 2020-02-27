@@ -7,8 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kg.flaterlab.book.models.SearchRequest
+import kg.flaterlab.book.services.GoogleBookService
 import kotlinx.android.synthetic.main.activity_main.*
-import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -18,15 +19,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var viewAdapter: MyAdapter
     private lateinit var viewManager: RecyclerView.LayoutManager
-    val retrofit = Retrofit.Builder()
-        .baseUrl("https://www.googleapis.com/")
-        .addConverterFactory(
-            GsonConverterFactory.create())
-        .build()
 
-    val service = retrofit.create(GitHubService::class.java)
-
-    val wikiApiServe by lazy {
+    val apiServe by lazy {
         create()
     }
     var disposable: Disposable? = null
@@ -52,7 +46,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun create(): GitHubService {
+    fun create(): GoogleBookService {
 
         val retrofit = Retrofit.Builder()
             .addCallAdapterFactory(
@@ -62,13 +56,13 @@ class MainActivity : AppCompatActivity() {
             .baseUrl("https://www.googleapis.com")
             .build()
 
-        return retrofit.create(GitHubService::class.java)
+        return retrofit.create(GoogleBookService::class.java)
     }
 
     private fun beginSearch(srsearch: String) {
 
         disposable =
-            wikiApiServe.search(srsearch)
+            apiServe.search(srsearch)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

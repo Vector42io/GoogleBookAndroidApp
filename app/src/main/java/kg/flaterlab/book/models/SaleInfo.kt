@@ -1,4 +1,4 @@
-package kg.flaterlab.book
+package kg.flaterlab.book.models
 
 data class SaleInfo (
     val country:  String,

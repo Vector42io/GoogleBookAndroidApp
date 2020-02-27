@@ -1,4 +1,4 @@
-package kg.flaterlab.book
+package kg.flaterlab.book.models
 
 data class SearchRequest (
     val kind : String,
